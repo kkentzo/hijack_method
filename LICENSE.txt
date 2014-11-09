@@ -1,4 +1,4 @@
-Copyright (c) 2014 kkentzo
+Copyright (c) 2014 Kyriakos Kentzoglanakis
 
 MIT License
 

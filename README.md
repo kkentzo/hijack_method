@@ -1,6 +1,8 @@
 # HijackMethod
 
-TODO: Write a gem description
+An exercise in Ruby meta-programming that provides functionality to
+intercept class (singleton) and instance method calls and execute code
+before and/or after the method is called.
 
 ## Installation
 
@@ -18,12 +20,47 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Let's say we have this class:
 
-## Contributing
+```ruby
+class Foo
+  def hello
+    puts "hello"
+  end
+  def self.hello
+    puts "self.hello"
+  end
+end
+```
 
-1. Fork it ( https://github.com/[my-github-username]/hijack_method/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+We can hijack the messages `Foo#hello` and `Foo.hello` as follows:
+
+# Hijack a singleton method
+
+```ruby
+require 'hijack_method'
+
+class Foo
+  class << self
+    extend HijackMethod
+	hijack_method(:hello,
+	  before: -> { code_to_run_before_hello },
+	  main: -> { code_to_replace_original_hello },
+	  after: -> { code_to_run_before_hello })
+  end
+end
+```
+
+# Hijack an instance method
+
+```ruby
+require 'hijack_method'
+
+class Foo
+  extend HijackMethod
+  hijack_method(:hello,
+  before: -> { code_to_run_before_hello },
+  main: -> { code_to_replace_original_hello },
+  after: -> { code_to_run_before_hello })
+end
+```
